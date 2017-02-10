@@ -1,0 +1,148 @@
+Before editing save a copy!
+
+1. Open a file ../admin/controller/common/filemanager.php
+    1.1 find function files()
+        1.1.1 around line number 104
+            to replace
+                $allowed = array(
+                            '.jpg',
+                            '.jpeg',
+                            '.png',
+                            '.gif'
+                        );
+
+            on             
+                // Allowed file extension types
+                $allowed = array();
+                $fileTypes = explode("\n", $this->config->get('config_file_extension_allowed'));
+                foreach ($fileTypes as $fileType) {
+                    array_push($allowed, '.' . trim($fileType));
+                }
+
+        Now the extension files are taken from the store(Administration->System->Settings->Server).
+            
+        1.1.2 around line number 144
+            to replace
+                $json[] = array(
+                    'filename' => basename($file),
+                    'file'     => utf8_substr($file, utf8_strlen(DIR_IMAGE . 'data/')),
+                    'thumb'    => $this->model_tool_image->resize(utf8_substr($file, utf8_strlen(DIR_IMAGE)), 100, 100),
+                    'size'     => round(utf8_substr($size, 0, utf8_strpos($size, '.') + 4), 2) . $suffix[$i]
+                );
+            on
+                // Add video file thumb
+                if (preg_match("/^video/i", mime_content_type($file))) {
+                    $_file = utf8_substr(DIR_IMAGE . 'video.png', utf8_strlen(DIR_IMAGE));
+                    $thumb = $this->model_tool_image->resize($_file, 100, 100);
+                } else {
+                    $thumb = $this->model_tool_image->resize(utf8_substr($file, utf8_strlen(DIR_IMAGE)), 100, 100);
+                }
+
+                $json[] = array(
+                    'filename' => basename($file),
+                    'file'     => utf8_substr($file, utf8_strlen(DIR_IMAGE . 'data/')),
+                    'thumb'    => $thumb,
+                    'size'     => round(utf8_substr($size, 0, utf8_strpos($size, '.') + 4), 2) . $suffix[$i]
+                );
+                
+    1.2 find function upload()
+        1.2.1 around line number 441-468(449-476)
+            to replace
+				if ($this->request->files['image']['size'] > 300000) {
+					$json['error'] = $this->language->get('error_file_size');
+				}
+
+				$allowed = array(
+					'image/jpeg',
+					'image/pjpeg',
+					'image/png',
+					'image/x-png',
+					'image/gif',
+					'application/x-shockwave-flash'
+				);
+
+				if (!in_array($this->request->files['image']['type'], $allowed)) {
+					$json['error'] = $this->language->get('error_file_type');
+				}
+
+				$allowed = array(
+					'.jpg',
+					'.jpeg',
+					'.gif',
+					'.png',
+					'.flv'
+				);
+
+				if (!in_array(strtolower(strrchr($filename, '.')), $allowed)) {
+					$json['error'] = $this->language->get('error_file_type');
+				}
+            on             
+                // Allowed file MIME-type
+                $allowed = array();
+
+                $filetypes = explode("\n", $this->config->get('config_file_mime_allowed'));
+
+                foreach ($filetypes as $filetype) {
+                    $allowed[] = trim($filetype);
+                }
+
+                if (!in_array($this->request->files['image']['type'], $allowed)) {
+                    $json['error'] = $this->language->get('error_file_type');
+                }
+
+                if ($this->request->files['image']['size'] > $this->ocstore->return_bytes(ini_get('upload_max_filesize'))) {
+                    $json['error'] = $this->language->get('error_file_size');
+                }
+
+                // Allowed file extension type
+                $allowed = array();
+
+                $filetypes = explode("\n", $this->config->get('config_file_extension_allowed'));
+
+                foreach ($filetypes as $filetype) {
+                    $allowed[] = '.' . trim($filetype);
+                }
+
+                if (!in_array(strtolower(strrchr($filename, '.')), $allowed)) {
+                    $json['error'] = $this->language->get('error_file_type');
+                }
+        Now the MIME-type of the file is retrieved from the store(Administration->System->Settings->Server)
+        and a maximum file upload size is taken from server settings(php.ini variable "upload_max_filesize")
+        
+2. Open a file ../system/library/ocstore.php
+    2.1. Add to class ocStore a public function return_bytes.
+    
+        public function return_bytes($val) {
+            $val = trim($val);
+            switch (strtolower(substr($val, -1))) {
+                case 'm':
+                    $val = (int)substr($val, 0, -1) * 1048576;
+                    break;
+                case 'k':
+                    $val = (int)substr($val, 0, -1) * 1024;
+                    break;
+                case 'g':
+                    $val = (int)substr($val, 0, -1) * 1073741824;
+                    break;
+                case 'b':
+                    switch (strtolower(substr($val, -2, 1))) {
+                        case 'm':
+                            $val = (int)substr($val, 0, -2) * 1048576;
+                            break;
+                        case 'k':
+                            $val = (int)substr($val, 0, -2) * 1024;
+                            break;
+                        case 'g':
+                            $val = (int)substr($val, 0, -2) * 1073741824;
+                            break;
+                        default :
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return $val;
+        }
+
+3. Copy video.png to folder ../image
