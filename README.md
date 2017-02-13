@@ -8,4 +8,4 @@ Tested on ocStore version 1.5.5.1.2.
 
 **Installation**
 
-Read the file `read.me`
+A user manual read in a file `read.me`
