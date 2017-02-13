@@ -89,7 +89,7 @@
                 }
 
                 if ($this->request->files['image']['size'] > $this->ocstore->getUploadMaxFileSizeBytes()) {
-                    $json['error'] = sprintf($this->language->get('error_file_size'), ini_get('upload_max_filesize'));
+                    $json['error'] = sprintf($this->language->get('error_file_size'), $this->ocstore->getUploadMaxFileSizeBytes());
                 }
 
                 // Allowed file extension type
@@ -112,7 +112,7 @@
             to replace
                 $json['error'] = $this->language->get('error_file');
             on
-                $json['error'] = sprintf($this->language->get('error_file'), ini_get('upload_max_filesize'));
+                $json['error'] = sprintf($this->language->get('error_file'), $this->ocstore->getUploadMaxFileSizeBytes());
                         
 2. Open a file ../system/library/ocstore.php
 
