@@ -17,7 +17,7 @@
                     array_push($allowed, '.' . trim($fileType));
                 }
 
-        Now file's extensions are taken from a store settings (Administration->System->Settings->Server).
+        Now file's extensions are taken from store settings (Administration->System->Settings->Server).
             
         - around line 144
             to replace
@@ -106,7 +106,7 @@
                 }
                 
         Now MIME-types of the file are retrieved from store settings(Administration->System->Settings->Server)
-        and a maximum file upload size is taken from server settings(.htaccess or php.ini parameter "upload_max_filesize")
+        and a maximum file upload size is taken from server settings(.htaccess or php.ini: option "upload_max_filesize")
                 
         - around line 483    
             to replace
