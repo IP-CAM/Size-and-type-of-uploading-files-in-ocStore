@@ -55,13 +55,16 @@ class ocStore {
             default:
                 break;
         }
-
         return $val;
     }
 
     public function getUploadMaxFileSize() {
         $uploadMaxFileSize = ini_get('upload_max_filesize');
 
-        return empty($uploadMaxFileSize) ? 300000 : $this->return_bytes($uploadMaxFileSize);
+        return empty($uploadMaxFileSize) ? 300000 : $uploadMaxFileSize;
+    }
+
+    public function getUploadMaxFileSizeBytes() {
+        return $this->return_bytes($this->getUploadMaxFileSize());
     }
 }
