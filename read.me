@@ -89,7 +89,7 @@
                 }
 
                 if ($this->request->files['image']['size'] > $this->ocstore->getUploadMaxFileSizeBytes()) {
-                    $json['error'] = sprintf($this->language->get('error_file_size'), $this->ocstore->getUploadMaxFileSizeBytes());
+                    $json['error'] = sprintf($this->language->get('error_file_size'), $this->ocstore->getUploadMaxFileSize());
                 }
 
                 // Allowed file extension type
@@ -112,50 +112,54 @@
             to replace
                 $json['error'] = $this->language->get('error_file');
             on
-                $json['error'] = sprintf($this->language->get('error_file'), $this->ocstore->getUploadMaxFileSizeBytes());
+                $json['error'] = sprintf($this->language->get('error_file'), $this->ocstore->getUploadMaxFileSize());
                         
 2. Open a file ../system/library/ocstore.php
 
-    Add to class ocStore functions return_bytes and getUploadMaxFileSize
+    Add to class ocStore functions return_bytes and getUploadMaxFileSize and getUploadMaxFile
     
-        public function return_bytes($val) {
-            $val = trim($val);
-            switch (strtolower(substr($val, -1))) {
-                case 'm':
-                    $val = (int)substr($val, 0, -1) * 1048576;
-                    break;
-                case 'k':
-                    $val = (int)substr($val, 0, -1) * 1024;
-                    break;
-                case 'g':
-                    $val = (int)substr($val, 0, -1) * 1073741824;
-                    break;
-                case 'b':
-                    switch (strtolower(substr($val, -2, 1))) {
-                        case 'm':
-                            $val = (int)substr($val, 0, -2) * 1048576;
-                            break;
-                        case 'k':
-                            $val = (int)substr($val, 0, -2) * 1024;
-                            break;
-                        case 'g':
-                            $val = (int)substr($val, 0, -2) * 1073741824;
-                            break;
-                        default :
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return $val;
+    public function return_bytes($val) {
+        $val = trim($val);
+        switch (strtolower(substr($val, -1))) {
+            case 'm':
+                $val = (int)substr($val, 0, -1) * 1048576;
+                break;
+            case 'k':
+                $val = (int)substr($val, 0, -1) * 1024;
+                break;
+            case 'g':
+                $val = (int)substr($val, 0, -1) * 1073741824;
+                break;
+            case 'b':
+                switch (strtolower(substr($val, -2, 1))) {
+                    case 'm':
+                        $val = (int)substr($val, 0, -2) * 1048576;
+                        break;
+                    case 'k':
+                        $val = (int)substr($val, 0, -2) * 1024;
+                        break;
+                    case 'g':
+                        $val = (int)substr($val, 0, -2) * 1073741824;
+                        break;
+                    default :
+                        break;
+                }
+                break;
+            default:
+                break;
         }
-        
-        public function getUploadMaxFileSize() {
-            $uploadMaxFileSize = ini_get('upload_max_filesize');
+        return $val;
+    }
 
-            return empty($uploadMaxFileSize) ? 300000 : $this->return_bytes($uploadMaxFileSize);
-        }
+    public function getUploadMaxFileSize() {
+        $uploadMaxFileSize = ini_get('upload_max_filesize');
+
+        return empty($uploadMaxFileSize) ? 300000 : $uploadMaxFileSize;
+    }
+
+    public function getUploadMaxFileSizeBytes() {
+        return $this->return_bytes($this->getUploadMaxFileSize());
+    }
 
 3. Edit a file ../admin/language/russian/common/filemanager.php
     - line 24, replace to $_['error_file']       = 'Выберите файл!' . PHP_EOL . PHP_EOL . 'Или выбранный файл превышает %s!';
