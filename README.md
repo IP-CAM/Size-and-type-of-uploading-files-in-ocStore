@@ -1,13 +1,24 @@
-## Hotfix size and type of uploading files in ocStore(OpenCart)
+## Size and type of uploading files in ocStore(OpenCart)
+---
+####This is a modification for ocStore(opencart shop) uses the store settings and the server settings to upload files.
 
-A maximum file upload size is taken from server settings.
+A maximum file upload size is equal to the option `upload_max_filesize` file `.htaccess` or `php.ini`.
 
-Use the option `upload_max_filesize` from file `.htaccess` or `php.ini`.
-
-MIME-types and file's extensions are taken from store settings (Administration->System->Settings->Server).
+MIME types and file's extensions are taken from store settings (Administration->System->Settings->Server).
 
 Tested on ocStore version 1.5.5.1.2. 
 
+Perhaps suitable for all versions of 1.5.x.
+
 **Installation**
 
-A user manual read in a file `read.me`
+       - to work needed installed vQmod
+       - download and extract archive
+       - copy folders contents to your project
+
+**Uninstall**
+
+For a full removal you need remove files: 
+
+       - image/video.png
+       - vqmod/xml/size-type-upload-file.xml
