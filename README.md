@@ -4,6 +4,8 @@
 
 A maximum file upload size is equal to the option `upload_max_filesize` file `.htaccess` or `php.ini`.
 
+>`.htaccess` has higher priority than `php.ini`
+
 MIME types and file's extensions are taken from store settings (Administration->System->Settings->Server).
 
 Tested on ocStore version 1.5.5.1.2. 
