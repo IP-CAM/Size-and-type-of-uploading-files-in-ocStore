@@ -12,6 +12,8 @@ Tested on ocStore version 1.5.5.1.2.
 
 Perhaps suitable for all versions of 1.5.x.
 
+Video URL     [YouTube](https://youtu.be/5lNR_efBHfE)
+
 **Installation**
 
        - to work needed installed vQmod
