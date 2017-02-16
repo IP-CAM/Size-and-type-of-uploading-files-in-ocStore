@@ -26,3 +26,13 @@ For a full removal you need remove files:
 
        - image/video.png
        - vqmod/xml/size-type-upload-file.xml
+
+---       
+**Danation**
+
+WebMoney 
+
+       - WMZ Z053784187938 
+       - WMR R414291317252 
+       
+BTC - 13bteFH6V2s4BqBRVYJLUUKWHK2A2PTJTb
