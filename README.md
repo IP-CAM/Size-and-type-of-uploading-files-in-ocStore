@@ -28,7 +28,7 @@ For a full removal you need remove files:
        - vqmod/xml/size-type-upload-file.xml
 
 ---       
-**Danation**
+**Donation**
 
 WebMoney 
 
