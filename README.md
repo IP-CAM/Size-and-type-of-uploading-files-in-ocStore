@@ -1,6 +1,6 @@
 ## Size and type of uploading files in ocStore(OpenCart)
 ---
-####This is a modification for ocStore(opencart shop) uses the store settings and the server settings to upload files.
+#### This is a modification for ocStore(opencart shop) uses the store settings and the server settings to upload files.
 
 A maximum file upload size is equal to the option `upload_max_filesize` file `.htaccess` or `php.ini`.
 
